@@ -1,0 +1,82 @@
+/* Paleta de colores
+#5472d4 */
+
+#carouselItem{
+    
+    display:flex;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: 300px;  
+    object-fit: cover;
+}
+
+.nav-link{
+    color: #5472d4;
+    
+}
+
+.searchButtom{
+    border-radius: 8px;
+    margin-left: 10px;
+    padding: 7px;
+}
+
+#ciudadImg{
+    width: 150px;   /* El tamaño que quieres que ocupe la imagen */
+    height: 150px;  /* Asegúrate de que sea cuadrado */
+    overflow: hidden;
+}
+
+#ciudadImg img{
+    width: 100%;
+    height: 100%;
+    object-fit:fill; 
+}
+.buttom.p-datepicker{
+    background-color: blue;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link{
+    background-color: #5472d4;;
+}
+
+
+.carousel{
+    margin-bottom: 30px;
+}
+
+.carousel-item img {
+    filter: brightness(50%);  /* Ajusta el brillo. 50% la oscurece */
+  }
+
+#containerVuelo{
+    display: flex;
+    justify-items: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    width: 90%;
+    height: 80px;
+    margin: 10px;
+    background-color:aliceblue;
+}
+
+.p-dropdown{
+    width: 50%;
+    margin-right: 20px;
+    background-color: rgb(255, 255, 255);
+}
+
+.p-dropdown-items{
+    
+    margin-left: -30px;
+}
+
+#buscarViajeContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
