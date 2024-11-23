@@ -138,3 +138,8 @@ border-radius: 8px;
     flex-direction: row;
     justify-content: space-around;
 }
+
+
+.custom-text-color {
+    color: #5472d4;
+  }
