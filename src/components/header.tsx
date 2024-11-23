@@ -4,9 +4,10 @@ import { Button } from "primereact/button";
 import "../assets/styles/style.css";
 
 import { Dialog } from "primereact/dialog";
-import Menu from "./menu";
-import { BuscadorViajes } from "./buscadorViajes";
 import { Login } from "./login";
+// import Menu from "./menu";
+// import { BuscadorViajes } from "./buscadorViajes";
+
 
 function Header() {
   const [visible, setVisible] = useState(false);
@@ -55,6 +56,7 @@ function Header() {
             <Login/>
           </Dialog>
           <Button label="Sing Up" link />
+          
         </div>
       </header>
     </div>
