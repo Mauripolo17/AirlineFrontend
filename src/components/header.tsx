@@ -5,13 +5,15 @@ import "../assets/styles/style.css";
 
 import { Dialog } from "primereact/dialog";
 import { Login } from "./login";
+import { SignUp } from "./signUp";
 // import Menu from "./menu";
 // import { BuscadorViajes } from "./buscadorViajes";
 
 
 function Header() {
-  const [visible, setVisible] = useState(false);
+  const [visibleLogin, setVisibleLogin] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [visibleSignUp, setVisibleSignUp] = useState(false);
 
   const navItems = [
     "Home",
@@ -20,6 +22,8 @@ function Header() {
     "Centro de Ayuda",
     "About",
   ];
+
+  
   return (
     <div className="container">
       <header
@@ -41,22 +45,35 @@ function Header() {
           ))}
         </ul>
         <div className="ms-auto">
-          <Button label="Login" onClick={() => setVisible(true)} />
+          <Button label="Login" onClick={() => setVisibleLogin(true)} className={`nav-button ${visibleLogin ? "active" : "bg-white custom-text-color" }`} />
           <Dialog
             header="Login"
-            visible={visible}
+            visible={visibleLogin}
             maximizable
             style={{ width: "50vw" }}
             onHide={() => {
-              if (!visible) return;
-              setVisible(false);
+              if (!visibleLogin) return;
+              setVisibleLogin(false);
             }}
             
           >
             <Login/>
           </Dialog>
-          <Button label="Sing Up" link />
-          
+          <Button label="Sing Up" onClick={() => setVisibleSignUp(true)} className={`nav-button ${visibleSignUp ? "active" : "bg-white custom-text-color" }`}  />
+          <Dialog
+            header="Sign Up"
+            visible={visibleSignUp}
+            maximizable
+            style={{ width: "50vw" }}
+            onHide={() => {
+              if (!visibleSignUp) return;
+              setVisibleSignUp(false);
+            }}
+            
+          >
+            <SignUp/>
+          </Dialog>
+
         </div>
       </header>
     </div>

@@ -30,7 +30,9 @@ export function Login() {
             />
           </div>
           <Button label="Iniciar sesión" className="w-full" />
+          <a href="#" className="text-center">¿Olvidaste tu contraseña?</a>
         </form>
+
     </div>
   );
 }
