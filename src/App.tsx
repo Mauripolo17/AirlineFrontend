@@ -4,7 +4,7 @@ import Header from "./components/header";
 // import Menu from "./components/menu";
 import { AuthProvider } from "./context/AuthContext";
 import { Footer } from "./components/footer";
-// import { Home } from "./components/home";
+import { Home } from "./components/home";
 import { Reserva } from "./components/reserva";
 import "primeflex/primeflex.css"; // flex
 import "primereact/resources/primereact.min.css"; //core css
@@ -17,8 +17,8 @@ function App() {
       <Router>
         <Header />
         <Routes>
-        <Route path="/" element={<Reserva/>} />     
-          {/* <Route path="/" element={<Home />} />           */}
+        <Route path="/Reserva" element={<Reserva/>} />     
+          <Route path="/" element={<Home />} />          
         </Routes>
         <Footer />
       </Router>

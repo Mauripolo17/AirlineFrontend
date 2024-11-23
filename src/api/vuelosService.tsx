@@ -9,23 +9,14 @@ export interface Vuelo {
     fechaDeSalida: string
     horaDeSalida: string
     capacidad: number
+    precio: number
+    img: string
     aerolinea: number
     aeropuerto: number
     duracion: number
 }
 
-export interface Vuelo2 {
-    id: number
-    origen: string
-    destino: string
-    fechaDeSalida: string
-    horaDeSalida: string
-    capacidad: number
-    aerolinea: number
-    aeropuerto: number
-    duracion: number
-    imagen:string
-}
+
 export const vueloService = {
     getVuelos: async ():Promise<Vuelo[]> =>{
         try{
@@ -43,6 +34,16 @@ export const vueloService = {
             return (await response).data
         }catch(error){
             throw new Error('Error al obtener los vuelos')
+            
+        }
+    },
+
+    getCiudades: async ():Promise<string[]> =>{
+        try{
+            const response = await axios.get(`${url_base}/vuelos/ciudades`)
+            return response.data
+        }catch(error){
+            throw new Error('Error al obtener las ciudades')
             
         }
     }

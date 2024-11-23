@@ -73,11 +73,20 @@ border-radius: 8px;
     margin-top: 20px;
 }
 
-#ciudadImg img{
+.nReserva{
+    display: flex;
+    justify-content: end;
+    /* flex-direction: row; */
+}
+
+#ciudadImg{
     width: 100%;
     height: 100%;
-    object-fit:fill; 
+    object-fit:cover; 
+    border-radius: 8px;
 }
+
+
 
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link{
     background-color: #5472d4;;

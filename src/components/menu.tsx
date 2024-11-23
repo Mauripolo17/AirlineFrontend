@@ -1,49 +1,40 @@
 // import "bootstrap/dist/css/bootstrap.min.css";
-import Carousel from "react-bootstrap/Carousel";
-import ciudades from "../assets/images/ciudades.tsx";
 import Viajes from "./viajes.tsx";
+import { useEffect, useState } from "react";
+import { Vuelo, vueloService } from "../api/vuelosService.tsx";
+import BuscadorViajes  from "./buscadorViajes.tsx";
+import CarouselComponent from "./Carousel.tsx";
+
 
 function Menu() {
+
+  const [vuelos, setVuelos] = useState<Vuelo[]>([]);
+  const [vuelos2, setVuelos2] = useState<Vuelo[]>([]);
+  const [searchMode, setSearchMode] = useState<boolean>(false);
+  
+
+  useEffect(() => {
+    loadVuelos();
+    setVuelos2(vuelos.slice(0,5));
+    console.log(vuelos2);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const loadVuelos = async () => {
+    try {
+      const getVuelos = await vueloService.getVuelos();
+      setVuelos(getVuelos);
+      setVuelos2(getVuelos.slice(0,5));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
   return (
-    <div >
-      <Carousel fade>
-        
-        <Carousel.Item id="carouselItem" interval={4000}>
-          <img
-            src={ciudades.medellin}
-            className="d-block w-100"
-            style={{ width: "80%" }}
-          />
-          <Carousel.Caption>
-            <h3>Medellin</h3>
-            <p>La cuidad de la eterna primavera</p>
-          </Carousel.Caption>
-        </Carousel.Item>
-        <Carousel.Item id="carouselItem" interval={4000}>
-          <img
-            src={ciudades.santaMarta}
-            className="d-block w-100"
-            style={{ width: "80%" }}
-          />
-          <Carousel.Caption>
-            <h3>Santa Marta</h3>
-            <p>Un pueblo hecho cuidad</p>
-          </Carousel.Caption>
-        </Carousel.Item>
-        <Carousel.Item id="carouselItem" interval={4000}>
-          <img
-            src={ciudades.madrid}
-            className="d-block w-100"
-            style={{ width: "80%" }}
-          />
-          <Carousel.Caption>
-            <h3>Madrid</h3>
-            <p>En españa</p>
-          </Carousel.Caption>
-        </Carousel.Item>
-      </Carousel>
-        
-  <Viajes></Viajes>
+    <div>
+     <BuscadorViajes setSearchMode={setSearchMode} />
+      {!searchMode ? <><CarouselComponent />
+        <Viajes vuelos={vuelos2} /></> : <h5>Hola</h5>}
       
     </div>
   );

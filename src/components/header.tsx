@@ -2,10 +2,7 @@ import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button } from "primereact/button";
 import "../assets/styles/style.css";
-
 import { Dialog } from "primereact/dialog";
-import Menu from "./menu";
-import { BuscadorViajes } from "./buscadorViajes";
 import { Login } from "./login";
 
 function Header() {
