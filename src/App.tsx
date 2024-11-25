@@ -9,7 +9,7 @@ import { Reserva } from "./components/reserva";
 import "primeflex/primeflex.css"; // flex
 import "primereact/resources/primereact.min.css"; //core css
 import "primereact/resources/themes/viva-light/theme.css";
-import Dashboard from "./components/Dashboad";
+import { Dashboard } from "./components/Dashboad";
 // import { Login } from "./components/login";
 
 function App() {
