@@ -12,6 +12,9 @@ import "primereact/resources/themes/viva-light/theme.css";
 import Dashboard from "./components/Dashboad";
 import { Login } from "./components/login";
 import { SignUp } from "./components/signUp";
+import { Dashboard } from "./components/Dashboad";
+
+
 // import { Login } from "./components/login";
 
 function App() {
