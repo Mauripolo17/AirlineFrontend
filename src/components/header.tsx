@@ -5,6 +5,7 @@ import "../assets/styles/style.css";
 import { Dialog } from "primereact/dialog";
 import { Login } from "./login";
 import { SignUp } from "./signUp";
+import { useNavigate } from "react-router-dom";
 // import Menu from "./menu";
 // import { BuscadorViajes } from "./buscadorViajes";
 
@@ -22,7 +23,17 @@ function Header() {
     "About",
   ];
 
+  const navigation = useNavigate();
   
+  const handleClick = (index: number, item:string) => {
+    setActiveIndex(index);
+    if(item === "Home"){
+      navigation('/');
+    }else{
+      navigation(`/${item}`);
+    }
+
+  }
   return (
     <div className="container">
       <header
@@ -36,7 +47,7 @@ function Header() {
               <a
                 href="#"
                 className={`nav-link ${activeIndex === index ? "active" : ""}`}
-                onClick={() => setActiveIndex(index)}
+                onClick={()=>handleClick(index, item)}
               >
                 {item}
               </a>
@@ -63,7 +74,7 @@ function Header() {
             header="Sign Up"
             visible={visibleSignUp}
             maximizable
-            style={{ width: "50vw" }}
+            style={{ width: "60vw" }}
             onHide={() => {
               if (!visibleSignUp) return;
               setVisibleSignUp(false);

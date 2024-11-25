@@ -104,6 +104,10 @@ border-radius: 8px;
     filter: brightness(50%);  /* Ajusta el brillo. 50% la oscurece */
   }
 
+  .buttomFormAuth{
+    border-radius: 8px;
+    width: 50%;
+  }
 #containerVuelo{
     display: flex;
     justify-items: center;

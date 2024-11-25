@@ -18,42 +18,42 @@ export function SignUp() {
       <form className="flex flex-column gap-3 p-5">
         <div className="p-inputgroup">
           <span className="p-inputgroup-addon">
-            <i className="pi pi-text"></i>
+            <i className="pi pi-user"></i>
           </span>
           <InputText placeholder="Name" required />
           <span className="p-inputgroup-addon">
-            <i className="pi pi-text"></i>
+            <i className="pi pi-user"></i>
           </span>
           <InputText placeholder="Lastname" required />
         </div>
         <div className="p-inputgroup">
           <span className="p-inputgroup-addon">
-            <i className="pi pi-number"></i>
+            <i className="pi pi-id-card"></i>
           </span>
           <InputText placeholder="Numero de cédula" required />
           <span className="p-inputgroup-addon">
-            <i className="pi pi-text"></i>
+            <i className="pi pi-phone"></i>
           </span>
           <InputText placeholder="Télefono" required />
         </div>
 
         <div className="p-inputgroup">
           <span className="p-inputgroup-addon">
-            <i className="pi pi-text"></i>
+            <i className="pi pi-at"></i>
           </span>
           <InputText type="email" placeholder="em@despega.com" required />
           
         </div>
         <div className="p-inputgroup">
         <span className="p-inputgroup-addon">
-            <i className="pi pi-text"></i>
+            <i className="pi pi-calendar"></i>
           </span>
           <Calendar placeholder="Fecha de nacimiento" value={date} onChange={(e) => setDate(e.value ?? undefined)} showButtonBar />
 
         </div>
         <div className="p-inputgroup">
           <span className="p-inputgroup-addon">
-            <i className="pi pi-text"></i>
+            <i className="pi pi-directions"></i>
           </span>
           <InputText type="address" placeholder="Cr.5 Cl-11 #D5-20" required />
         </div>

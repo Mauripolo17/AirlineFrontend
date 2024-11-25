@@ -14,7 +14,7 @@ export interface cliente {
 }
 
 
-const url_base = "http://localhost:8080/api";
+const url_base = "http://localhost:8080/api/clientes";
 export const clienteService = {
   getClients: async (): Promise<cliente[]> => {
     return await axios.get(`${url_base}/clientes`);
@@ -23,9 +23,10 @@ export const clienteService = {
     username: string,
     token: string
   ): Promise<cliente> => {
-    return await axios.get(`${url_base}/clientes/username/${username}`, {
+    const client = await axios.get(`${url_base}/username/${username}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+    return client.data;
   },
 
 };
