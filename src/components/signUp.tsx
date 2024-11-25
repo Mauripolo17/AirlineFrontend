@@ -29,7 +29,7 @@ export function SignUp() {
     telefono: null,
     fechaDeNacimiento: null,
   });
-  
+
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -58,7 +58,7 @@ export function SignUp() {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/clientes", {
+      const response = await fetch("http://localhost:8080/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -25,7 +25,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ userName, userEmail }) => {
     {
       label: 'Buscar Vuelos',
       icon: 'pi pi-search',
-      command: () => navigate('/buscarvuelos')
+      command: () => navigate('/')
     }
   ];
 
