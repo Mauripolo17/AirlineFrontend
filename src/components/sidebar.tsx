@@ -20,12 +20,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ userName, userEmail }) => {
     {
       label: 'Mis Reservas',
       icon: 'pi pi-calendar',
-      command: () => navigate('/reservas')
+      command: () => navigate('/misreservas')
     },
     {
       label: 'Buscar Vuelos',
       icon: 'pi pi-search',
-      command: () => navigate('/buscar')
+      command: () => navigate('/buscarvuelos')
     }
   ];
 
@@ -42,7 +42,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ userName, userEmail }) => {
       label: 'Cerrar Sesión',
       icon: 'pi pi-power-off',
       command: () => {
-        // Aquí va lógica de cierre de sesión
+        // Logica de cierre de sesión
         navigate('/login');
       }
     }   

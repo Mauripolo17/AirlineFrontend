@@ -1,10 +1,9 @@
 import React from 'react';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Card } from 'primereact/card';
-import { HistorialVuelos } from './historialVuelos';
 import { Sidebar } from './sidebar';
 
-export const Dashboard: React.FC = () => {
+export const HistorialReservas: React.FC = () => {
 
 
   return (
@@ -16,16 +15,16 @@ export const Dashboard: React.FC = () => {
       
       <div className="flex-1 p-4">
         <div className="mb-4">
-          <h1 className="text-3xl font-bold text-gray-800">Mi Dashboard</h1>
-          <p className="text-gray-600">Bienvenido de nuevo, Juan</p>
+          <h1 className="text-3xl font-bold text-gray-800">Mis Reservas</h1>
+          <br />
         </div>
 
         <TabView>
-          <TabPanel header="Resumen de Vuelos" leftIcon="pi pi-home mr-2">
+          <TabPanel header="Reservas" leftIcon="pi pi-calendar mr-2">
             <div className="grid grid-cols-12 gap-4">
               <div className="col-12">
-                <Card title="Historial de Vuelos" className="mb-4">
-                  <HistorialVuelos />
+                <Card title="Historial de Reservas" className="mb-4 ">
+                  // Aquí va el la logica del HistorialReservas
                 </Card>
               </div>
             </div>
