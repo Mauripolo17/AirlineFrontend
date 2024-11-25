@@ -2,7 +2,7 @@ import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 import { loginRequest } from '../api/authService';
-import {  useState } from 'react';
+import {  useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,18 +17,22 @@ export function Login() {
 
   const {login, isAuthenticated} = useAuth();
 
-
-  const handleButtonLogin = async ()=>{
-    await login(loginRequest);
+  useEffect(()=>{
     if(isAuthenticated){
       navigation('/dashboard');
     }
+  },[isAuthenticated]);
+
+  const handleButtonLogin = async ()=>{
+    await login(loginRequest);
+    
   }
 
   
 
   return (
-    <div className="flex align-items-center justify-content-center">
+    <div className="containerLogin">
+      <div className="flex align-items-center justify-content-center" id='containerFormLogin'>
         <div className="flex flex-column align-items-center mb-4">
           <img src="/avion.png" alt="Logo" className="w-6rem h-6rem mb-2" />
           <h1 className="text-2xl font-bold text-900 mb-2">Despegala.com</h1>
@@ -66,7 +70,7 @@ export function Login() {
         </form>
         <Button label="Iniciar sesión" className='buttomFormAuth' onClick={handleButtonLogin}/>
         </div>
-
+    </div>
     </div>
   );
 }

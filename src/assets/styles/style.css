@@ -147,3 +147,26 @@ border-radius: 8px;
 .custom-text-color {
     color: #5472d4;
   }
+
+.containerLogin{
+    color: #646464;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  #containerFormLogin{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+    height: 100%;
+    margin-top: 50px;
+    padding: 50px;
+    margin-bottom: 50px;
+    border-radius: 10px;
+    filter: drop-shadow(0 0 7px #33333315);
+    background-color: rgb(255, 255, 255);
+  }
