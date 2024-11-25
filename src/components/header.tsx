@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button } from "primereact/button";
 import "../assets/styles/style.css";
@@ -6,14 +6,22 @@ import { Dialog } from "primereact/dialog";
 import { Login } from "./login";
 import { SignUp } from "./signUp";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 // import Menu from "./menu";
 // import { BuscadorViajes } from "./buscadorViajes";
-
 
 function Header() {
   const [visibleLogin, setVisibleLogin] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [visibleSignUp, setVisibleSignUp] = useState(false);
+  const {isAuthenticated, logout} = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setVisibleLogin(false);
+      setVisibleSignUp(false);
+    }
+  }, [isAuthenticated]);
 
   const navItems = [
     "Home",
@@ -24,15 +32,41 @@ function Header() {
   ];
 
   const navigation = useNavigate();
-  
-  const handleClick = (index: number, item:string) => {
+
+  const handleClick = (index: number, item: string) => {
     setActiveIndex(index);
-    if(item === "Home"){
-      navigation('/');
-    }else{
+    if (item === "Home") {
+      navigation("/");
+    } else {
       navigation(`/${item}`);
     }
+  };
 
+  const handleButtonLogout = () => {
+    logout();
+    () => navigation("/")
+
+  }
+
+  function loginAndSignUpButtons() {
+    return (
+      <>
+      <Button
+            label="Login"
+            onClick={() => navigation("/login")}
+            className={`nav-button ${
+              visibleLogin ? "active" : "bg-white custom-text-color"
+            }`}
+          />
+          <Button
+            label="Sing Up"
+            onClick={() => navigation("/signUp")}
+            className={`nav-button ${
+              visibleSignUp ? "active" : "bg-white custom-text-color"
+            }`}
+          />
+         </>
+    )
   }
   return (
     <div className="container">
@@ -47,7 +81,7 @@ function Header() {
               <a
                 href="#"
                 className={`nav-link ${activeIndex === index ? "active" : ""}`}
-                onClick={()=>handleClick(index, item)}
+                onClick={() => handleClick(index, item)}
               >
                 {item}
               </a>
@@ -55,35 +89,12 @@ function Header() {
           ))}
         </ul>
         <div className="ms-auto">
-          <Button label="Login" onClick={() => setVisibleLogin(true)} className={`nav-button ${visibleLogin ? "active" : "bg-white custom-text-color" }`} />
-          <Dialog
-            header="Login"
-            visible={visibleLogin}
-            maximizable
-            style={{ width: "50vw" }}
-            onHide={() => {
-              if (!visibleLogin) return;
-              setVisibleLogin(false);
-            }}
-            
-          >
-            <Login/>
-          </Dialog>
-          <Button label="Sing Up" onClick={() => setVisibleSignUp(true)} className={`nav-button ${visibleSignUp ? "active" : "bg-white custom-text-color" }`}  />
-          <Dialog
-            header="Sign Up"
-            visible={visibleSignUp}
-            maximizable
-            style={{ width: "60vw" }}
-            onHide={() => {
-              if (!visibleSignUp) return;
-              setVisibleSignUp(false);
-            }}
-            
-          >
-            <SignUp/>
-          </Dialog>
-
+          {isAuthenticated ? (
+          <Button
+            label="Logout"
+            onClick={handleButtonLogout}
+            className="nav-button bg-white custom-text-color"/>
+          ):loginAndSignUpButtons()}
         </div>
       </header>
     </div>
