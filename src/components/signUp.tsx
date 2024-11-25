@@ -91,6 +91,7 @@ export function SignUp() {
               />
             </div>
           </form>
+          
           <Button label="Registrarme" className="buttomFormAuth" />
         </div>
       </div>

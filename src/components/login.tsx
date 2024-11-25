@@ -69,7 +69,8 @@ export function Login() {
           <a href="#" className="text-center">¿Olvidaste tu contraseña?</a>
         </form>
         <Button label="Iniciar sesión" className='buttomFormAuth' onClick={handleButtonLogin}/>
-        </div>
+        <hr />
+        <Button label="Registrarse" className='buttomFormAuth2' onClick={()=>navigation('/signUp')}/></div>
     </div>
     </div>
   );

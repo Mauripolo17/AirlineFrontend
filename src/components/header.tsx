@@ -11,17 +11,9 @@ import { useAuth } from "../context/AuthContext";
 // import { BuscadorViajes } from "./buscadorViajes";
 
 function Header() {
-  const [visibleLogin, setVisibleLogin] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [visibleSignUp, setVisibleSignUp] = useState(false);
-  const {isAuthenticated, logout} = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      setVisibleLogin(false);
-      setVisibleSignUp(false);
-    }
-  }, [isAuthenticated]);
 
   const navItems = [
     "Home",
@@ -44,30 +36,9 @@ function Header() {
 
   const handleButtonLogout = () => {
     logout();
-    () => navigation("/")
+    () => navigation("/");
+  };
 
-  }
-
-  function loginAndSignUpButtons() {
-    return (
-      <>
-      <Button
-            label="Login"
-            onClick={() => navigation("/login")}
-            className={`nav-button ${
-              visibleLogin ? "active" : "bg-white custom-text-color"
-            }`}
-          />
-          <Button
-            label="Sing Up"
-            onClick={() => navigation("/signUp")}
-            className={`nav-button ${
-              visibleSignUp ? "active" : "bg-white custom-text-color"
-            }`}
-          />
-         </>
-    )
-  }
   return (
     <div className="container">
       <header
@@ -90,11 +61,18 @@ function Header() {
         </ul>
         <div className="ms-auto">
           {isAuthenticated ? (
-          <Button
-            label="Logout"
-            onClick={handleButtonLogout}
-            className="nav-button bg-white custom-text-color"/>
-          ):loginAndSignUpButtons()}
+            <Button
+              label="Logout"
+              onClick={handleButtonLogout}
+              className="nav-button bg-white custom-text-color"
+            />
+          ) : (
+            <Button
+              label="Login"
+              onClick={() => navigation("/login")}
+              className={"nav-button"}
+            />
+          )}
         </div>
       </header>
     </div>
