@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Vuelo, vueloService } from "../api/vuelosService.tsx";
 import BuscadorViajes  from "./buscadorViajes.tsx";
 import CarouselComponent from "./Carousel.tsx";
+import { ResultadosDrBusqueda } from "./ResultadosDrBusqueda.tsx";
 
 
 function Menu() {
@@ -17,7 +18,7 @@ function Menu() {
     loadVuelos();
     setVuelos2(vuelos.slice(0,5));
     console.log(vuelos2);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadVuelos = async () => {
     try {
@@ -34,7 +35,7 @@ function Menu() {
     <div>
      <BuscadorViajes setSearchMode={setSearchMode} />
       {!searchMode ? <><CarouselComponent />
-        <Viajes vuelos={vuelos2} /></> : <h5>Hola</h5>}
+        <Viajes vuelos={vuelos2} /></> : <ResultadosDrBusqueda/>}
       
     </div>
   );

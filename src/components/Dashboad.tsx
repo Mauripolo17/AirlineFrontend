@@ -3,21 +3,21 @@ import { TabView, TabPanel } from 'primereact/tabview';
 import { Card } from 'primereact/card';
 import { HistorialVuelos } from './historialVuelos';
 import { Sidebar } from './sidebar';
+import { useAuth } from '../context/AuthContext';
 
 export const Dashboard: React.FC = () => {
 
+    const { user} = useAuth();
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <Sidebar 
-        userName="Juan Pérez"
-        userEmail="juan@example.com"
+      <Sidebar
       />
       
       <div className="flex-1 p-4">
         <div className="mb-4">
           <h1 className="text-3xl font-bold text-gray-800">Mi Dashboard</h1>
-          <p className="text-gray-600">Bienvenido de nuevo, Juan</p>
+          <p className="text-gray-600">Bienvenido de nuevo, {user?.nombre}</p>
         </div>
 
         <TabView>

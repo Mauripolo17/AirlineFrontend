@@ -29,17 +29,20 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
   const [user, setUser] = useState<cliente | null>(
     JSON.parse(localStorage.getItem("user") || "null")
   );
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  const [isAuthenticated, setIsAuthenticated] = useState(() =>
+    localStorage.getItem("isAuthenticated") === "false" ? false : true
+  );
   const [token, setToken] = useState(() => localStorage.getItem("token"));
 
+  useEffect(() => {
+    localStorage.setItem("isAuthenticated", isAuthenticated ? "true" : "false");
+  }, [isAuthenticated]);
+
   const login = async (loginRequest: loginRequest) => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
     try {
       const { data } = await axios.post(
         "http://localhost:8080/api/auth/login",
@@ -51,6 +54,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsAuthenticated(true);
       setToken(data.token);
       localStorage.setItem("token", data.token);
+
       await loadUser(data.token);
     } catch (error: any) {
       console.error(
@@ -82,9 +86,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setToken(null);
     setUser(null);
     setIsAuthenticated(false);
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-
+    localStorage.clear();
   };
 
   // Configurar axios para agregar el token automáticamente en cada petición
@@ -97,7 +99,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [token]);
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, isAuthenticated }}>
+    <AuthContext.Provider
+      value={{ user, token, login, logout, isAuthenticated }}
+    >
       {children}
     </AuthContext.Provider>
   );
