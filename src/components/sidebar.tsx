@@ -1,18 +1,18 @@
-import React from 'react';
+
 import { Menu } from 'primereact/menu';
 import { MenuItem } from 'primereact/menuitem';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-interface SidebarProps {
-  userName: string;
-  userEmail: string;
-}
+// interface SidebarProps {
+//   userName: string;
+//   userEmail: string;
+// }
 
-export const Sidebar: React.FC<SidebarProps> = ({ userName, userEmail }) => {
+export const Sidebar = () => {
   const navigate = useNavigate();
 
-  const {logout} = useAuth();
+  const {logout, user} = useAuth();
 
   const menuItems: MenuItem[] = [
     {
@@ -67,8 +67,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ userName, userEmail }) => {
         <div className="flex align-items-center gap-3 mb-3">
         <i className="pi pi-user p-3" style={{ fontSize: '1.5rem' }}></i>
           <div>
-            <div className="font-bold">{userName}</div>
-            <div className="text-sm text-500">{userEmail}</div>
+            <div className="font-bold">{user?.username}</div>
+            <div className="text-sm text-500">{user?.email}</div>
           </div>
         </div>
         

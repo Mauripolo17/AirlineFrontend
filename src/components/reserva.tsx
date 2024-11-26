@@ -85,7 +85,9 @@ export function Reserva() {
     // }));
     console.log(formData);
     const response = await pasajeroService.savePasajeros(formData);
+    if (idReserva) {
     idReserva.pasajeros = response;
+    }
     // const response2 = await reservaService.updateReserva(idReserva, idReserva?.id ?? 0);
     // console.log("Reserva acualizada", response2);
     console.log(response);
