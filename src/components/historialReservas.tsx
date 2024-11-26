@@ -49,7 +49,11 @@ export const HistorialReservas: React.FC = () => {
     
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:8080/api/reservas/cliente/${user?.id}`);
+      if (!user) {
+        throw new Error('Usuario no autenticado.');
+      }
+      const response = await fetch(`http://localhost:8080/api/reservas/cliente/${user.id}`)
+      console.log(response); 
       if (!response.ok) {
         throw new Error('Failed to fetch reservas');
       }
