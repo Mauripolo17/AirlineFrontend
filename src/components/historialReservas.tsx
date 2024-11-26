@@ -6,6 +6,7 @@ import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { Sidebar } from "./sidebar";
 import { useAuth } from "../context/AuthContext";
+import axios from "axios";
 
 interface Vuelo {
   origen: string;
@@ -52,12 +53,12 @@ export const HistorialReservas: React.FC = () => {
       if (!user) {
         throw new Error('Usuario no autenticado.');
       }
-      const response = await fetch(`http://localhost:8080/api/reservas/cliente/${user.id}`)
+      const response = await axios.get(`http://localhost:8080/api/reservas/cliente/${user.id}`);
       console.log(response); 
-      if (!response.ok) {
+      if (!response.data) {
         throw new Error('Failed to fetch reservas');
       }
-      const data = await response.json();
+      const data = await response.data;
       setReservas(data);
     } catch (error) {
       console.error('Error fetching reservas:', error);

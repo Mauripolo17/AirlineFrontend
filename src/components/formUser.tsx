@@ -5,6 +5,7 @@ import { Calendar } from "primereact/calendar";
 import { useState, FormEvent, ChangeEvent } from "react";
 import { InputNumber, InputNumberValueChangeEvent } from "primereact/inputnumber";
 import { useAuth } from "../context/AuthContext";
+import axios from "axios";
 
 interface FormData {
   username: string;
@@ -84,29 +85,24 @@ export function FormUsuario({ mode, initialData }: FormProps) {
           fechaDeNacimiento: formData.fechaDeNacimiento,
         };
 
-    try {
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        setError(errorData.message || "Error al procesar la solicitud");
-      } else {
-        setSuccessMessage(
-          mode === "signup"
-            ? "Cliente registrado exitosamente"
-            : "Datos actualizados correctamente"
-        );
-      }
-    } catch (error) {
-      setError("Error al procesar la solicitud");
-      console.error("Error:", error);
-    }
+        try {
+          const response = method === "POST"? await axios.post(url, requestData): await axios.put(url, requestData);
+    
+          if (!response) {
+            const errorData = await response
+            setError(errorData || "Error al procesar la solicitud");
+          } else {
+            setSuccessMessage(
+              mode === "signup"
+                ? "Cliente registrado exitosamente"
+                : "Datos actualizados correctamente"
+            );
+            console.log(response.data);
+          }
+        } catch (error) {
+          setError("Error al procesar la solicitud");
+          console.error("Error:", error);
+        }
   };
 
   return (
