@@ -2,6 +2,7 @@ import React from 'react';
 import { Menu } from 'primereact/menu';
 import { MenuItem } from 'primereact/menuitem';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 interface SidebarProps {
   userName: string;
@@ -10,6 +11,8 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ userName, userEmail }) => {
   const navigate = useNavigate();
+
+  const {logout} = useAuth();
 
   const menuItems: MenuItem[] = [
     {
@@ -43,7 +46,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ userName, userEmail }) => {
       icon: 'pi pi-power-off',
       command: () => {
         // Aquí va lógica de cierre de sesión
-        navigate('/login');
+        logout();
+        navigate('/');
       }
     }   
   ];

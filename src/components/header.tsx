@@ -35,8 +35,7 @@ function Header() {
   };
 
   const handleButtonLogout = () => {
-    logout();
-    () => navigation("/");
+    navigation("/dashboard");
   };
 
   return (
@@ -62,7 +61,7 @@ function Header() {
         <div className="ms-auto">
           {isAuthenticated ? (
             <Button
-              label="Logout"
+              label={`Dashboard`}
               onClick={handleButtonLogout}
               className="nav-button bg-white custom-text-color"
             />
