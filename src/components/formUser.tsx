@@ -3,8 +3,12 @@ import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
 import { useState, FormEvent, ChangeEvent } from "react";
-import { InputNumber, InputNumberValueChangeEvent } from "primereact/inputnumber";
+import {
+  InputNumber,
+  InputNumberValueChangeEvent,
+} from "primereact/inputnumber";
 import { useAuth } from "../context/AuthContext";
+import axios from "axios";
 
 interface FormData {
   username: string;
@@ -49,12 +53,16 @@ export function FormUsuario({ mode, initialData }: FormProps) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleNumberChange = (e: InputNumberValueChangeEvent, fieldName: keyof FormData) => {
+  const handleNumberChange = (
+    e: InputNumberValueChangeEvent,
+    fieldName: keyof FormData
+  ) => {
     setFormData((prev) => ({ ...prev, [fieldName]: e.value }));
   };
 
   const handleDateChange = (value: Date | null) => {
     setFormData((prev) => ({ ...prev, fechaDeNacimiento: value }));
+    console.log(value);
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -73,35 +81,31 @@ export function FormUsuario({ mode, initialData }: FormProps) {
         : `http://localhost:8080/api/clientes/${user?.id}`;
     const method = mode === "signup" ? "POST" : "PUT";
 
-    const requestData = mode === "signup"
-      ? formData
-      : {
-          email: formData.email,
-          nombre: formData.nombre,
-          apellido: formData.apellido,
-          direccion: formData.direccion,
-          telefono: formData.telefono,
-          fechaDeNacimiento: formData.fechaDeNacimiento,
-        };
+    const requestData =
+      mode === "signup"
+        ? formData
+        : {
+            email: formData.email,
+            nombre: formData.nombre,
+            apellido: formData.apellido,
+            direccion: formData.direccion,
+            telefono: formData.telefono,
+            fechaDeNacimiento: formData.fechaDeNacimiento,
+          };
 
     try {
-      const response = await fetch(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestData),
-      });
+      const response = method === "POST"? await axios.post(url, requestData): await axios.put(url, requestData);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        setError(errorData.message || "Error al procesar la solicitud");
+      if (!response) {
+        const errorData = await response
+        setError(errorData || "Error al procesar la solicitud");
       } else {
         setSuccessMessage(
           mode === "signup"
             ? "Cliente registrado exitosamente"
             : "Datos actualizados correctamente"
         );
+        console.log(response.data);
       }
     } catch (error) {
       setError("Error al procesar la solicitud");
@@ -152,7 +156,9 @@ export function FormUsuario({ mode, initialData }: FormProps) {
                   placeholder="Número de Documento"
                   required
                   value={formData.numeroDocumento}
-                  onValueChange={(e) => handleNumberChange(e, "numeroDocumento")}
+                  onValueChange={(e) =>
+                    handleNumberChange(e, "numeroDocumento")
+                  }
                 />
               </div>
             )}
@@ -247,7 +253,9 @@ export function FormUsuario({ mode, initialData }: FormProps) {
               </div>
             )}
             {error && <div className="alert alert-danger">{error}</div>}
-            {successMessage && <div className="alert alert-success">{successMessage}</div>}
+            {successMessage && (
+              <div className="alert alert-success">{successMessage}</div>
+            )}
             <Button
               type="submit"
               label={mode === "signup" ? "Registrarse" : "Actualizar Datos"}

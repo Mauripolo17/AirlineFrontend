@@ -32,7 +32,8 @@ function App() {
             <Route path="/editarperfil" element ={<EditarPerfil/>}></Route>     
             <Route path="/misreservas" element={<HistorialReservas/>}></Route>
             <Route path="/dashboard" element={<Dashboard />} />     
-            <Route path="/Reserva" element={<Reserva/>} />       
+            <Route path="/Reserva" element={<Reserva/>} />     
+            <Route path="/reservas" element={<HistorialReservas/>} />  
           </Route>
         </Routes>
         <Footer />

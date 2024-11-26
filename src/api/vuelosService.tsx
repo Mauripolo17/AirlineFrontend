@@ -87,4 +87,14 @@ export const vueloService = {
       throw new Error("Error al obtener los vuelos");
     }
   },
+  getVuelosByReserva: async (id: number): Promise<Vuelo[]> => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/vuelos/reservas/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error("Error al obtener los vuelos");
+    }
+  }
 };

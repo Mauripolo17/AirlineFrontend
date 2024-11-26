@@ -6,8 +6,12 @@ import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import { Sidebar } from "./sidebar";
 import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+import { vueloService } from "../api/vuelosService";
+import { pasajeroService } from "../api/pasajeroService";
 
-interface Vuelo {
+interface Vueloh {
+  id: number;
   origen: string;
   destino: string;
   fecha: string;
@@ -23,12 +27,14 @@ interface Reserva {
   id: number;
   fechaReserva: string;
   numeroVuelo: string;
-  vuelos: Vuelo[];
+  vuelos: Vueloh[];
   pasajeros: Pasajero[];
 }
 
 export const HistorialReservas: React.FC = () => {
   const [reservas, setReservas] = useState<Reserva[]>([]);
+  const [pasajeros, setPasajeros] = useState<Reserva[]>([]);
+  const [vuelos, setVuelos] = useState<Reserva[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState("");
 
@@ -52,19 +58,34 @@ export const HistorialReservas: React.FC = () => {
       if (!user) {
         throw new Error('Usuario no autenticado.');
       }
-      const response = await fetch(`http://localhost:8080/api/reservas/cliente/${user.id}`)
-      console.log(response); 
-      if (!response.ok) {
+      const response = await axios.get((`http://localhost:8080/api/reservas/cliente/${user.id}`))
+      console.log(response.data); 
+      if (!response) {
         throw new Error('Failed to fetch reservas');
       }
-      const data = await response.json();
-      setReservas(data);
-    } catch (error) {
-      console.error('Error fetching reservas:', error);
-      setError("Hubo un error al cargar las reservas. Por favor, intente de nuevo más tarde.");
-    } finally {
-      setLoading(false);
-    }
+        // Procesar vuelos y pasajeros de forma asíncrona
+    const reservasConDetalles = await Promise.all(
+      response.data.map(async (reserva: Reserva) => {
+        const [responseVuelos, responsePasajeros] = await Promise.all([
+          vueloService.getVuelosByReserva(reserva.id),
+          pasajeroService.getPasajeroByReserva(reserva.id),
+        ]);
+
+        return {
+          ...reserva,
+          vuelos: responseVuelos,
+          pasajeros: responsePasajeros,
+        };
+      })
+    );
+
+    setReservas(reservasConDetalles);
+  } catch (error: any) {
+    console.error("Error fetching reservas:", error);
+    setError("Hubo un error al cargar las reservas. Por favor, intente de nuevo más tarde.");
+  } finally {
+    setLoading(false);
+  }
   };
 
   const actionBodyTemplate = () => {
@@ -91,9 +112,19 @@ export const HistorialReservas: React.FC = () => {
   };
 
   const vuelosBodyTemplate = (rowData: Reserva) => {
+
     return rowData.vuelos.map((vuelo, index) => (
       <div key={index}>
-        {vuelo.origen} - {vuelo.destino} ({dateBodyTemplate(vuelo.fecha)})
+      {vuelo.origen}-{vuelo.destino}
+      </div>
+    ));
+  };
+
+  const NBodyTemplate = (rowData: Reserva) => {
+
+    return rowData.vuelos.map((vuelo, index) => (
+      <div key={index}>
+      {vuelo.id}
       </div>
     ));
   };
@@ -101,7 +132,7 @@ export const HistorialReservas: React.FC = () => {
   const pasajerosBodyTemplate = (rowData: Reserva) => {
     return rowData.pasajeros.map((pasajero, index) => (
       <div key={index}>
-        {pasajero.nombre} {pasajero.apellido} (Doc: {pasajero.numeroDocumento})
+        {pasajero.nombre}
       </div>
     ));
   };
@@ -131,11 +162,11 @@ export const HistorialReservas: React.FC = () => {
                     rowsPerPageOptions={[5, 10, 25, 50]}
                   >
                     <Column field="id" header="ID" sortable />
-                    <Column field="numeroVuelo" header="Número de Vuelo" sortable />
+                    <Column field="vuelos{" header="Número de Vuelo" sortable body={(rowData) => NBodyTemplate(rowData)}/>
                     <Column field="fechaReserva" header="Fecha de Reserva" sortable body={(rowData) => dateBodyTemplate(rowData.fechaReserva)} />
-                    <Column header="Vuelos" body={vuelosBodyTemplate} />
+                    <Column field="vuelos.id" header="Vuelos" sortable body={(rowData)=>vuelosBodyTemplate(rowData)} />
                     <Column header="Pasajeros" body={pasajerosBodyTemplate} />
-                    <Column body={actionBodyTemplate} header="Acciones" />
+                    {/* <Column body={actionBodyTemplate} header="Acciones" /> */}
                   </DataTable>
                 </Card>
               </div>

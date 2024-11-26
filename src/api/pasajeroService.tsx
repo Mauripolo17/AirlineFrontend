@@ -24,5 +24,14 @@ export const pasajeroService = {
         } catch (error) {
             console.log(error);
         }
-    } 
+    },
+    getPasajeroByReserva: async (reserva: number): Promise<Pasajero[]> => {
+        try {
+            const response = await axios.get(`${baseUrl}/reservas/${reserva}`);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            return [];
+        }
+    }
 }
