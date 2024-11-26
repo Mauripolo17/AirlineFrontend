@@ -10,11 +10,12 @@ import "primereact/resources/primereact.min.css"; //core css
 import "primereact/resources/themes/viva-light/theme.css";
 import { Dashboard } from "./components/Dashboad";
 import { Login } from "./components/login";
-import { SignUp } from "./components/signUp";
 import PrivateRoutes from "./PrivateRoutes";
 import { ReservaProvider } from "./context/ReservaContext";
 import Menu from "./components/menu";
-
+import { HistorialReservas } from "./components/historialReservas";
+import { EditarPerfil } from "./components/editarPerfil";
+import { SignUp } from "./components/signUp";
 // import { Login } from "./components/login";
 
 function App() {
@@ -28,6 +29,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signUp" element={<SignUp />} />
           <Route element={<PrivateRoutes />}>
+            <Route path="/editarperfil" element ={<EditarPerfil/>}></Route>     
+            <Route path="/misreservas" element={<HistorialReservas/>}></Route>
             <Route path="/dashboard" element={<Dashboard />} />     
             <Route path="/Reserva" element={<Reserva/>} />       
           </Route>
