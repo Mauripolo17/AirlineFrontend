@@ -11,9 +11,7 @@ export const Dashboard: React.FC = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      <Sidebar 
-        userName={user?.nombre || "undefined"}
-        userEmail={user?.email || "undefined"}
+      <Sidebar
       />
       
       <div className="flex-1 p-4">
@@ -23,7 +21,7 @@ export const Dashboard: React.FC = () => {
         </div>
 
         <TabView>
-          <TabPanel header="Resumen" leftIcon="pi pi-home mr-2">
+          <TabPanel header="Resumen de Vuelos" leftIcon="pi pi-home mr-2">
             <div className="grid grid-cols-12 gap-4">
               <div className="col-12">
                 <Card title="Historial de Vuelos" className="mb-4">

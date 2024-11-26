@@ -29,4 +29,11 @@ export const clienteService = {
     return client.data;
   },
 
+  createClient: async (client: cliente): Promise<cliente> => {
+    const newClient = await axios.post(`${url_base}/clientes`, client);
+    return newClient.data;
+  },
+
+
+
 };
