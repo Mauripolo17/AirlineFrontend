@@ -8,17 +8,17 @@ export function EditarPerfil() {
   const { user } = useAuth();
 
   const initialUserData = {
-    username: user?.username || "",
     email: user?.email || "",
-    password: "",
     nombre: user?.nombre || "",
     apellido: user?.apellido || "",
-    numeroDocumento: user?.numeroDocumento || null,
     direccion: user?.direccion || "",
     telefono: user?.telefono || null,
     fechaDeNacimiento: user?.fechaDeNacimiento
       ? new Date(user.fechaDeNacimiento)
       : null,
+    username: user?.username || "", // Valor requerido pero no usado en edición
+    password: "",                  // Valor vacío para edición
+    numeroDocumento: user?.numeroDocumento || null, // Predeterminado 
   };
 
   return (
@@ -35,7 +35,7 @@ export function EditarPerfil() {
             <div className="grid grid-cols-12 gap-4">
               <div className="w-full">
                 <Card className="w-full">
-                    <FormUsuario mode="edit" initialData={initialUserData} />
+                  <FormUsuario mode="edit" initialData={initialUserData} />
                 </Card>
               </div>
             </div>

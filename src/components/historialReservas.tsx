@@ -67,7 +67,7 @@ export const HistorialReservas: React.FC = () => {
     }
   };
 
-  const actionBodyTemplate = (rowData: Reserva) => {
+  const actionBodyTemplate = () => {
     return (
       <div className="flex gap-2">
         <Button 
@@ -79,7 +79,7 @@ export const HistorialReservas: React.FC = () => {
         <Button 
           icon="pi pi-times"
           className="p-button-danger p-button-sm"
-          tooltip="Cancelar Vuelo"
+          tooltip="Cancelar reserva"
           tooltipOptions={{ position: 'top' }}
         />
       </div>

@@ -70,20 +70,28 @@ export function FormUsuario({ mode, initialData }: FormProps) {
     const url =
       mode === "signup"
         ? "http://localhost:8080/api/auth/signup"
-        : `http://localhost:8080/api/cliente/${user?.id}`;
+        : `http://localhost:8080/api/clientes/${user?.id}`;
     const method = mode === "signup" ? "POST" : "PUT";
 
-    const requestData = mode === "signup" ? formData : { ...formData, password: undefined };
-
+    const requestData = mode === "signup"
+      ? formData
+      : {
+          email: formData.email,
+          nombre: formData.nombre,
+          apellido: formData.apellido,
+          direccion: formData.direccion,
+          telefono: formData.telefono,
+          fechaDeNacimiento: formData.fechaDeNacimiento,
+        };
 
     try {
-        const response = await fetch(url, {
-            method,
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(requestData),
-          });
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -135,16 +143,20 @@ export function FormUsuario({ mode, initialData }: FormProps) {
                 onChange={handleInputChange}
               />
             </div>
+            {mode === "signup" && (
+              <div className="p-inputgroup">
+                <span className="p-inputgroup-addon">
+                  <i className="pi pi-id-card"></i>
+                </span>
+                <InputNumber
+                  placeholder="Número de Documento"
+                  required
+                  value={formData.numeroDocumento}
+                  onValueChange={(e) => handleNumberChange(e, "numeroDocumento")}
+                />
+              </div>
+            )}
             <div className="p-inputgroup">
-              <span className="p-inputgroup-addon">
-                <i className="pi pi-id-card"></i>
-              </span>
-              <InputNumber
-                placeholder="Número de Documento"
-                required
-                value={formData.numeroDocumento}
-                onValueChange={(e) => handleNumberChange(e, "numeroDocumento")}
-              />
               <span className="p-inputgroup-addon">
                 <i className="pi pi-phone"></i>
               </span>
@@ -194,7 +206,7 @@ export function FormUsuario({ mode, initialData }: FormProps) {
                 <i className="pi pi-user"></i>
               </span>
               <InputText
-                placeholder="Nombre de Usuario"
+                placeholder="Nombre de usuario"
                 required
                 name="username"
                 value={formData.username}
