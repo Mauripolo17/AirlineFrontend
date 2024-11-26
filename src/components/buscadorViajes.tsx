@@ -1,23 +1,21 @@
 import { Dropdown } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
 import { useEffect, useRef, useState } from "react";
-import { Nullable } from "primereact/ts-helpers";
 import { Button } from "primereact/button";
 import "primereact/resources/themes/viva-light/theme.css";
 import "primeicons/primeicons.css";
 import { vueloService } from "../api/vuelosService";
 import { Toast } from "primereact/toast";
 import { SelectButton } from "primereact/selectbutton";
+import { useReservaContext } from "../context/ReservaContext";
 
-function BuscadorViajes({ setSearchMode }: any) {
-  const [origen, setOrigen] = useState(null);
-  const [destino, setDestino] = useState(null);
-  const [desde, setDesde] = useState<Nullable<Date>>(null);
-  const [hasta, setHasta] = useState<Nullable<Date>>(null);
+function BuscadorViajes() {
   const [ciudades, setCiudades] = useState<string[]>([]);
-
+ const { flightToSearch, setFlightToSearch } = useReservaContext();
+ const {searchMode, setSearchMode} = useReservaContext();
   const options: string[] = ["Solo ida", "Ida y vuelta"];
   const [ida, setIda] = useState<string>(options[0]);
+  
   useEffect(() => {
     loadCiudades();
   }, []);
@@ -40,10 +38,12 @@ function BuscadorViajes({ setSearchMode }: any) {
     });
   };
   function handleSearchButtom() {
-    if (destino && desde && origen) {
+    if (flightToSearch.destino && flightToSearch.desde && flightToSearch.origen) {
       if (ida === "Solo ida") {
-        setSearchMode(true);
-      } else if (ida === "Ida y vuelta" && hasta) {
+        // setFlightToSearch({ ...flightToSearch});
+        console.log(flightToSearch);
+        setSearchMode({...searchMode, searchMode:true});
+      } else if (ida === "Ida y vuelta" && flightToSearch.hasta) {
         setSearchMode(true);
       }
     } else {
@@ -67,8 +67,8 @@ function BuscadorViajes({ setSearchMode }: any) {
             <div className="d-flex">
               <div className="d-flex w-100">
               <Dropdown
-                value={origen}
-                onChange={(e) => setOrigen(e.value)}
+                value={flightToSearch.origen}
+                onChange={(e) => setFlightToSearch({ ...flightToSearch, origen: e.value }) }
                 options={ciudades}
                 optionLabel="origen"
                 editable
@@ -76,8 +76,8 @@ function BuscadorViajes({ setSearchMode }: any) {
                 className="w-full md:w-13rem"
               />
               <Dropdown
-                value={destino}
-                onChange={(e) => setDestino(e.value)}
+                value={flightToSearch.destino}
+                onChange={(e) => setFlightToSearch({...flightToSearch, destino:e.value})}
                 options={ciudades}
                 optionLabel="destino"
                 editable
@@ -89,24 +89,24 @@ function BuscadorViajes({ setSearchMode }: any) {
                 {ida === "Solo ida" ? (
                   <>
                     <Calendar
-                      value={desde}
+                      value={flightToSearch.desde}
                       placeholder="Fecha"
-                      onChange={(e) => setDesde(e.value)}
+                      onChange={(e) => setFlightToSearch({...flightToSearch, desde:e.value})}
                       className="flex-grow-1"
                     />
                   </>
                 ) : (
                   <>
                     <Calendar
-                      value={desde}
+                      value={flightToSearch.desde}
                       placeholder="Desde"
-                      onChange={(e) => setDesde(e.value)}
+                      onChange={(e) => setFlightToSearch({...flightToSearch, desde:e.value})}
                       className="flex-grow-1"
                     />
                     <Calendar
-                      value={hasta}
+                      value={flightToSearch.hasta}
                       placeholder="Hasta"
-                      onChange={(e) => setHasta(e.value)}
+                      onChange={(e) => setFlightToSearch({...flightToSearch, hasta:e.value})}
                       className="flex-grow-1"
                       hideOnRangeSelection
                     />

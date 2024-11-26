@@ -1,41 +1,127 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
+import { useReservaContext } from "../context/ReservaContext";
+import { Pasajero, pasajeroService } from "../api/pasajeroService";
+import { reservaService } from "../api/reservasService";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export function Reserva() {
-  const [formData, setFormData] = useState({
-    nombre: "",
-    apellido: "",
-    tipoDocumento: "",
-    numeroDocumento: null,
-    fechaNacimiento: null,
-    sexo: "",
-  });
+  const [formData, setFormData] = useState<Pasajero[]>([
+    {
+      nombre: "",
+      apellido: "",
+      tipoDocumento: "",
+      numeroDocumento: 0,
+      fechaDeNacimiento: "",
+      sexo: "",
+      reserva: 0,
+    },
+  ]);
+  const { flightSelected } = useReservaContext();
+  const [nReservas, setNReservas] = useState<number>(1);
+  const { user } = useAuth();
+  const [successMessage, setSuccessMessage] = useState("");
 
-  const [nReservas, setNReservas] = useState(1);
-  const handleChange = (e: { target: { name: any; value: any } }) => {
+  const navigation = useNavigate();
+  const handleChange = (
+    e: { target: { name: any; value: any } },
+    index: number
+  ) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    setFormData((prevState) => {
+      const newFormData = [...prevState]; // Hacemos una copia del arreglo de pasajeros
+      if (name == "fechaDeNacimiento") {
+        newFormData[index] = {
+          ...newFormData[index],
+          [name]: value.toISOString().slice(0, 10),
+        }; // Actualizamos el pasajero correspondiente
+      } else {
+        newFormData[index] = { ...newFormData[index], [name]: value }; // Actualizamos el pasajero correspondiente
+      }
+      return newFormData;
+    });
   };
 
-  const handleDropdownChange = (e: DropdownChangeEvent) => {
-    const name = e.target.name;
-    name === "nReservas"
-      ? setNReservas(e.value)
-      : setFormData((prevState) => ({
-          ...prevState,
-          [name]: e.value,
-        }));
+  const handleChangeDate = (e: any, index: number) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => {
+      const newFormData = [...prevState]; // Hacemos una copia del arreglo de pasajeros
+      newFormData[index] = {
+        ...newFormData[index],
+        [name]: value.toISOString().slice(0, 10),
+      }; // Actualizamos el pasajero correspondiente
+      return newFormData;
+    });
   };
-  const handleSubmit = (e: React.FormEvent) => {
+
+  // useEffect(() => {
+  //   console.log(flightSelected);
+  // }, [flightSelected]);
+  const handleDropdownChange = (e: DropdownChangeEvent, index: number) => {
+    const name = e.target.name;
+    const value = e.value;
+    setFormData((prevState) => {
+      const newFormData = [...prevState]; // Hacemos una copia del arreglo de pasajeros
+      newFormData[index] = { ...newFormData[index], [name]: value }; // Actualizamos el pasajero correspondiente
+      return newFormData;
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aquí podrías enviar los datos a una API o manejar el envío como desees
+
+    const idReserva = await createReserva();
+    console.log(idReserva?.id);
+
+    //   const formDataWithISODate = formData.map((pasajero) => ({
+    //   ...pasajero,
+    //   fechaNacimiento: pasajero.fechaNacimiento
+    //     ? pasajero.fechaNacimiento.toISOString().slice(0, 10)
+    //     : null,
+    // }));
+    console.log(formData);
+    const response = await pasajeroService.savePasajeros(formData);
+    idReserva.pasajeros = response;
+    // const response2 = await reservaService.updateReserva(idReserva, idReserva?.id ?? 0);
+    // console.log("Reserva acualizada", response2);
+    console.log(response);
+    // setFormData(formDataWithISODate);
+
     console.log("Formulario enviado:", formData);
+    setTimeout(() => {
+      navigation("/");
+    }, 2000);
+  };
+
+  const createReserva = async () => {
+    const reserva = {
+      fechaReserva: new Date().toISOString().slice(0, 10),
+      cliente: user?.id ?? 0,
+      pasajeros: [],
+      vuelos: [],
+    };
+    reserva.vuelos?.push(flightSelected);
+    const response = await reservaService.createReserva(reserva);
+    if (response) {
+      setSuccessMessage("Reserva creada exitosamente");
+    }else{
+      setSuccessMessage("Error al crear la reserva");
+    }
+    setReservaPasajeros(response?.id ?? 0);
+    console.log(response);
+
+    return response;
+  };
+
+  const setReservaPasajeros = (idReserva: number) => {
+    formData.map((pasajero) => {
+      pasajero.reserva = idReserva;
+    });
+    console.log("Pasajeros enviados SIIIII:", formData);
   };
 
   const documentType = [
@@ -47,22 +133,22 @@ export function Reserva() {
   const sexoType = ["Masculino", "Femenino", "Otro"];
   const numeroDeReservas = [1, 2, 3, 4, 5];
 
-
   function formReserva(index: number) {
     return (
       <div className="nForm">
-        <hr/>
-        <h5 className="font-bold block mb-2">Pasajero {index+1}</h5>
+        <hr />
+        <h5 className="font-bold block mb-2">Pasajero {index + 1}</h5>
         <br />
         <div className="divFormCol">
-        
           <div>
             <label className="font-bold block mb-2">Nombre</label>
             <InputText
               id="nombre"
               name="nombre"
-              value={formData.nombre}
-              onChange={handleChange}
+              value={formData[index].nombre}
+              onChange={(e) => {
+                handleChange(e, index);
+              }}
             />
           </div>
 
@@ -71,21 +157,23 @@ export function Reserva() {
             <InputText
               id="apellido"
               name="apellido"
-              value={formData.apellido}
-              onChange={handleChange}
+              value={formData[index].apellido}
+              onChange={(e) => {
+                handleChange(e, index);
+              }}
             />
           </div>
         </div>
         <div className="divFormCol">
           <div>
             <div>
-              <label className="font-bold block mb-2 ">
-                Tipo de documento
-              </label>
+              <label className="font-bold block mb-2 ">Tipo de documento</label>
               <Dropdown
-                value={formData.tipoDocumento}
+                value={formData[index].tipoDocumento}
                 name="tipoDocumento"
-                onChange={handleDropdownChange}
+                onChange={(e) => {
+                  handleDropdownChange(e, index);
+                }}
                 options={documentType}
                 optionLabel="tipoDocumento"
                 className="w-full md:w-13rem"
@@ -93,15 +181,15 @@ export function Reserva() {
             </div>
           </div>
           <div>
-            <label className="font-bold block mb-2 ">
-              Numero de documento
-            </label>
+            <label className="font-bold block mb-2 ">Numero de documento</label>
             <InputText
               keyfilter="int"
               name="numeroDocumento"
               id="numeroDocumento"
-              value={formData.numeroDocumento}
-              onChange={handleChange}
+              value={formData[index].numeroDocumento.toString()}
+              onChange={(e) => {
+                handleChange(e, index);
+              }}
             />
           </div>
         </div>
@@ -111,18 +199,23 @@ export function Reserva() {
               Fecha de Nacimiento:
             </label>
             <Calendar
-              name="fechaNacimiento"
-              value={formData.fechaNacimiento}
-              onChange={handleChange}
+              dateFormat="yy-mm-dd"
+              name="fechaDeNacimiento"
+              value={formData[index].fechaDeNacimiento}
+              onChange={(e) => {
+                handleChangeDate(e, index);
+              }}
               className="w-full md:w-13rem"
             />
           </div>
           <div>
             <label className="font-bold block mb-2 ">Sexo</label>
             <Dropdown
-              value={formData.sexo}
+              value={formData[index].sexo}
               name="sexo"
-              onChange={handleDropdownChange}
+              onChange={(e) => {
+                handleDropdownChange(e, index);
+              }}
               options={sexoType}
               className="w-full md:w-13rem"
             />
@@ -141,7 +234,20 @@ export function Reserva() {
             </h2>
             <Dropdown
               value={nReservas}
-              onChange={handleDropdownChange}
+              onChange={(e) => {
+                setFormData(
+                  Array.from({ length: e.value }, (_, index) => ({
+                    nombre: "",
+                    apellido: "",
+                    tipoDocumento: "",
+                    numeroDocumento: 0,
+                    fechaDeNacimiento: "",
+                    sexo: "",
+                    reserva: 0,
+                  }))
+                );
+                setNReservas(e.value);
+              }}
               options={numeroDeReservas}
               name="nReservas"
               optionLabel="numero de reservas"
@@ -149,12 +255,24 @@ export function Reserva() {
               className="w-full md:w-4rem "
             />
           </div>
-          { Array.from({length: nReservas}, (_,index) =>(
-            formReserva(index)
-          ))}
+          {Array.from({ length: nReservas }, (_, index) => formReserva(index))}
+          {successMessage && (
+            <div className="alert alert-success">{successMessage}</div>
+          )}
           <Button label="Reservar" />
         </form>
       </div>
     </div>
   );
 }
+
+// apellido: "Polo"
+// fechaDeNacimiento: ""
+// fechaNacimiento: "2024-10-06"
+// nombre: "Maurricio"
+// numeroDocumento:
+// "123123"
+// reserva: 302
+// sexo:
+// "Masculino"
+// tipoDocumento:"Cedula de ciudadania"
