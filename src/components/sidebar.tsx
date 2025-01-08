@@ -23,7 +23,7 @@ export const Sidebar = () => {
     {
       label: 'Mis Reservas',
       icon: 'pi pi-calendar',
-      command: () => navigate('/reservas')
+      command: () => navigate('/misreservas')
     },
     {
       label: 'Buscar Vuelos',
