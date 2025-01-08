@@ -16,6 +16,7 @@ import Menu from "./components/menu";
 import { HistorialReservas } from "./components/historialReservas";
 import { EditarPerfil } from "./components/editarPerfil";
 import { SignUp } from "./components/signUp";
+import { HistorialVuelos } from "./components/historialVuelos";
 // import { Login } from "./components/login";
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />     
             <Route path="/Reserva" element={<Reserva/>} />     
             <Route path="/reservas" element={<HistorialReservas/>} />  
+            <Route path="/misVuelos" element={<HistorialVuelos/>} />
           </Route>
         </Routes>
         <Footer />

@@ -58,19 +58,34 @@ export const HistorialReservas: React.FC = () => {
       if (!user) {
         throw new Error('Usuario no autenticado.');
       }
-      const response = await fetch(`http://localhost:8080/api/reservas/cliente/${user.id}`)
-      console.log(response); 
-      if (!response.ok) {
+      const response = await axios.get((`http://localhost:8080/api/reservas/cliente/${user.id}`))
+      console.log(response.data); 
+      if (!response) {
         throw new Error('Failed to fetch reservas');
       }
-      const data = await response.json();
-      setReservas(data);
-    } catch (error) {
-      console.error('Error fetching reservas:', error);
-      setError("Hubo un error al cargar las reservas. Por favor, intente de nuevo más tarde.");
-    } finally {
-      setLoading(false);
-    }
+        // Procesar vuelos y pasajeros de forma asíncrona
+    const reservasConDetalles = await Promise.all(
+      response.data.map(async (reserva: Reserva) => {
+        const [responseVuelos, responsePasajeros] = await Promise.all([
+          vueloService.getVuelosByReserva(reserva.id),
+          pasajeroService.getPasajeroByReserva(reserva.id),
+        ]);
+
+        return {
+          ...reserva,
+          vuelos: responseVuelos,
+          pasajeros: responsePasajeros,
+        };
+      })
+    );
+
+    setReservas(reservasConDetalles);
+  } catch (error: any) {
+    console.error("Error fetching reservas:", error);
+    setError("Hubo un error al cargar las reservas. Por favor, intente de nuevo más tarde.");
+  } finally {
+    setLoading(false);
+  }
   };
 
   const actionBodyTemplate = () => {

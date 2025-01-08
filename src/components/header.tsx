@@ -13,7 +13,7 @@ import { useAuth } from "../context/AuthContext";
 function Header() {
   const [activeIndex, setActiveIndex] = useState(0);
   const { isAuthenticated, logout, user } = useAuth();
-
+  const [loading, setLoading] = useState(true);
 
   const navItems = [
     "Home",
@@ -23,6 +23,9 @@ function Header() {
     "About",
   ];
 
+  useEffect(() => {
+    user && setLoading(false);
+  }, [user]);
   const navigation = useNavigate();
 
   const handleClick = (index: number, item: string) => {
@@ -61,7 +64,7 @@ function Header() {
         <div className="ms-auto">
           {isAuthenticated ? (
             <Button
-              label={`Dashboard`}
+              label={user?`Hola, ${user?.nombre}`:"cargando..."}
               onClick={handleButtonLogout}
               className="nav-button bg-white custom-text-color"
             />

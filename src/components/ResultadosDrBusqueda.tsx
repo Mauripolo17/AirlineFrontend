@@ -26,6 +26,7 @@ export function ResultadosDrBusqueda() {
 
   const handlReservaButton=(data:VueloInfo)=>{
       setFlightSelected(data);
+      debugger; 
       navigation('/Reserva');
   }
 
@@ -66,7 +67,7 @@ export function ResultadosDrBusqueda() {
                   </p>
                   <p className="card-text">
                     <strong>Precio:</strong>{" "}
-                    <span id="precio-vuelo">{`${vuelo.precio} `}</span>
+                    <span id="precio-vuelo">{`${vuelo.precio}`}</span>
                   </p>
                   <p className="card-text">
                     <strong>Aerolínea:</strong>{" "}

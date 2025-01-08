@@ -2,9 +2,11 @@ import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 import { loginRequest } from '../api/authService';
-import {  useEffect, useState } from 'react';
+import {  useEffect, useRef, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { Message } from 'primereact/message';
+import { Toast } from 'primereact/toast';
 
 export function Login() {
 
@@ -13,7 +15,14 @@ export function Login() {
     password: ""
   });
 
+  const [error, setError] = useState<string | null>(null);
+  
   const navigation = useNavigate();
+
+  const toast = useRef<Toast>(null);
+  const showError = (error:string) => {
+    toast.current?.show({severity:'error', summary: 'Error', detail:`${error}`, life: 3000});
+}
 
   const {login, isAuthenticated} = useAuth();
 
@@ -24,8 +33,15 @@ export function Login() {
   },[isAuthenticated]);
 
   const handleButtonLogin = async ()=>{
-    await login(loginRequest);
-    
+      try {
+          await login(loginRequest);
+      } catch (error:any) {
+          setError("Error al iniciar sesión, verifica las credenciales");
+          showError('Error al iniciar sesión, verifica las credenciales');
+          setTimeout(()=>{
+              setError(null);
+          }, 5000);
+      }
   }
 
   
@@ -69,8 +85,10 @@ export function Login() {
           <a href="#" className="text-center">¿Olvidaste tu contraseña?</a>
         </form>
         <Button label="Iniciar sesión" className='buttomFormAuth' onClick={handleButtonLogin}/>
+        <Toast ref={toast} />
         <hr />
         <Button label="Registrarse" className='buttomFormAuth2' onClick={()=>navigation('/signUp')}/></div>
+        
     </div>
     </div>
   );

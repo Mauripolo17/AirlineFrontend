@@ -1,6 +1,5 @@
 import "primeflex/primeflex.css"; // flex
 import "primereact/resources/primereact.min.css"; //core css
-import { useState, useEffect } from "react";
 import { Button } from "primereact/button";
 import "primereact/resources/themes/viva-light/theme.css";
 import { DataScroller } from "primereact/datascroller";
@@ -10,21 +9,6 @@ interface ViajesProps {
   vuelos: Vuelo[]; // Especifica que la prop "vuelos" es un array de Vuelo2
 }
 const Viajes: React.FC<ViajesProps> = ({ vuelos }) => {
-  // const getSeverity = (product): => {
-  //     switch (product.inventoryStatus) {
-  //         case 'INSTOCK':
-  //             return 'success';
-
-  //         case 'LOWSTOCK':
-  //             return 'warning';
-
-  //         case 'OUTOFSTOCK':
-  //             return 'danger';
-
-  //         default:
-  //             return null;
-  //     }
-  // };
 
   const itemTemplate = (data: Vuelo) => {
     return (

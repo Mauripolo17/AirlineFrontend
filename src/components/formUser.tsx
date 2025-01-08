@@ -114,10 +114,10 @@ export function FormUsuario({ mode, initialData }: FormProps) {
   };
 
   return (
-    <div className="containerLogin">
+    <div className={ mode === "signup" ? "containerLogin":"d-flex justify-content-center"}>
       <div
         className="flex align-items-center justify-content-center"
-        id="containerFormLogin"
+        id={mode === "signup" ? "containerFormLogin" : ""}
       >
         <div className="flex flex-column align-items-center mb-4">
           <img src="/avion.png" alt="Logo" className="w-6rem h-6rem mb-2" />
@@ -154,6 +154,7 @@ export function FormUsuario({ mode, initialData }: FormProps) {
                 </span>
                 <InputNumber
                   placeholder="Número de Documento"
+                  useGrouping={false}
                   required
                   value={formData.numeroDocumento}
                   onValueChange={(e) =>
@@ -168,6 +169,7 @@ export function FormUsuario({ mode, initialData }: FormProps) {
               </span>
               <InputNumber
                 placeholder="Número de Teléfono"
+                useGrouping={false}
                 required
                 value={formData.telefono}
                 onValueChange={(e) => handleNumberChange(e, "telefono")}

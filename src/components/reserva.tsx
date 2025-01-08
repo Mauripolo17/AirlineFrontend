@@ -6,6 +6,7 @@ import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { useReservaContext } from "../context/ReservaContext";
 import { Pasajero, pasajeroService } from "../api/pasajeroService";
 import { reservaService } from "../api/reservasService";
+import type { Reserva } from "../api/reservasService";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -52,7 +53,7 @@ export function Reserva() {
       const newFormData = [...prevState]; // Hacemos una copia del arreglo de pasajeros
       newFormData[index] = {
         ...newFormData[index],
-        [name]: value.toISOString().slice(0, 10),
+        [name]: value
       }; // Actualizamos el pasajero correspondiente
       return newFormData;
     });
@@ -100,13 +101,14 @@ export function Reserva() {
   };
 
   const createReserva = async () => {
-    const reserva = {
+    const reserva:Reserva = {
       fechaReserva: new Date().toISOString().slice(0, 10),
       cliente: user?.id ?? 0,
       pasajeros: [],
       vuelos: [],
+      
     };
-    reserva.vuelos?.push(flightSelected);
+    flightSelected && reserva.vuelos?.push(flightSelected);
     const response = await reservaService.createReserva(reserva);
     if (response) {
       setSuccessMessage("Reserva creada exitosamente");
@@ -238,7 +240,7 @@ export function Reserva() {
               value={nReservas}
               onChange={(e) => {
                 setFormData(
-                  Array.from({ length: e.value }, (_, index) => ({
+                  Array.from({ length: e.value }, () => ({
                     nombre: "",
                     apellido: "",
                     tipoDocumento: "",

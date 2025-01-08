@@ -16,9 +16,9 @@ export const Sidebar = () => {
 
   const menuItems: MenuItem[] = [
     {
-      label: 'Dashboard',
-      icon: 'pi pi-home',
-      command: () => navigate('/dashboard')
+      label: 'Mis vuelos',
+      icon: 'pi pi-send',
+      command: () => navigate('/misVuelos')
     },
     {
       label: 'Mis Reservas',

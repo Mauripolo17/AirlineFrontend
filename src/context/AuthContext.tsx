@@ -8,9 +8,11 @@ import {
 import { loginRequest } from "../api/authService";
 import axios from "axios";
 import { clienteService, cliente } from "../api/clienteService";
+import { jwtDecode } from "jwt-decode";
+
 
 interface AuthContextType {
-  login: (loginReques: loginRequest) => void;
+  login: (loginRequest: loginRequest) => void;
   isAuthenticated: boolean;
   logout: () => void;
   token: string | null;
@@ -34,7 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const [isAuthenticated, setIsAuthenticated] = useState(() =>
-    localStorage.getItem("isAuthenticated") === "false" ? false : true
+    localStorage.getItem("isAuthenticated") === "true"
   );
   const [token, setToken] = useState(() => localStorage.getItem("token"));
 
@@ -61,15 +63,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         "Error al iniciar sesión:",
         error.response?.data?.message || error.message
       );
+      return error;
     }
   };
 
   const loadUser = async (token: string) => {
     let decodedToken;
     try {
-      decodedToken = JSON.parse(atob(token.split(".")[1]));
+      decodedToken = jwtDecode(token);
       const client = await clienteService.getClientByUsername(
-        decodedToken.sub,
+        decodedToken.sub as string,
         token
       );
       localStorage.setItem("user", JSON.stringify(client));
@@ -85,7 +88,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     setToken(null);
     setUser(null);
-    setIsAuthenticated(false);
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("isAuthenticated");
     localStorage.clear();
   };
 
